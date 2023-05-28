@@ -1,0 +1,312 @@
+#include <bits/stdc++.h>
+#include<conio.h>
+#include<windows.h>
+#include <cstdlib>
+using namespace std;
+
+class menu
+{
+protected:
+     string menuItems[24] = {
+        // Pizza Items
+        "Margherita Pizza",
+        "Pepperoni Pizza",
+        "Hawaiian Pizza",
+        "Veggie Supreme Pizza",
+        "BBQ Chicken Pizza",
+        "Mediterranean Pizza",
+
+        // Burgers
+        "Cheeseburger",
+        "Bacon Burger",
+        "Veggie Burger",
+        "Chicken Burger",
+        "Mushroom Swiss Burger",
+        "BBQ Burger",
+
+        // Pasta
+        "Spaghetti Bolognese",
+        "Fettuccine Alfredo",
+        "Penne Arrabiata",
+        "Lasagna",
+        "Carbonara",
+        "Pesto Pasta",
+
+        // Soft Drinks
+        "Coca-Cola",
+        "Pepsi",
+        "Sprite",
+        "Fanta",
+        "Mountain Dew",
+        "7UP"
+    } ;
+
+    int price[24] = {20,22,24,26,28,29, 12,13,14,15,16,17, 14,16,18,9,20,22, 7,7,7,7,7,7};
+    int total;
+public:
+
+    void show(){
+        cout << "\t\t\t\t\t\t\t\t\t""MENU""\n"<< "\t\t\t\t\t\t\t\t     *********\n";
+        for(int i = 0, c = 1; i < 24; i++, c++) {
+            if(i == 0) {cout << "\n\n\n\t\t\t\t\t\t\t\t\tPizza\n" << "\t\t\t\t\t\t\t\t\t======\n\n";}
+            else if(i == 6)  {cout << "\n\n\t\t\t\t\t\t\t\t\tBurger\n" << "\t\t\t\t\t\t\t\t\t======\n\n";}
+            else if(i == 12) {cout << "\n\n\t\t\t\t\t\t\t\t\tPasta\n" << "\t\t\t\t\t\t\t\t\t======\n\n"; }
+            else if(i == 18) {cout << "\n\n\t\t\t\t\t\t\t\t\tSoft Drinks\n" << "\t\t\t\t\t\t\t\t\t===========\n\n"; }
+                cout << "\t\t" << i+1 << ". " << menuItems[i] << " - " << price[i];
+                if(c == 3) {cout << "\t\n"; c = 0;}
+        }
+        cout << "\t\t\t\t\t\t\t\t25. EXIT\n";
+        cout << "\n\n\n";
+    }
+};
+
+// listar[] is to store the quantity of an item
+
+class order : public menu
+{
+public:
+    vector <int> olist;
+    int key, pizza, pasta, burger, sd, total = 0;
+    string ans;
+
+    int bill(int price, int item){total += price*item;}
+    int bill(int prev_quantity, int new_quantity, int price){total -= ((prev_quantity - new_quantity)*price);}
+
+    order()
+    {
+        int listar[24] = {0};
+        ofstream write;
+        write.open("order.text");
+        if(!write)
+        {
+            cout<<"file can not open"<<endl;
+            exit (-1);
+        }
+
+        a:
+            b:
+                c:
+                    cout << "\n\n\t\t\t\tENTER THE KEY OF YOUR ORDER (one order at a time): ";
+                    cin >> key;
+
+                    cout << "\n\n\tDO YOU WANT TO UPDATE YOUR ORDER (yes/no) : ";
+                    cin >> ans;
+
+                    if(ans=="yes"|| ans=="YES")
+                    {
+                    goto b;
+                    }
+                    else
+                    {
+                        if(key >= 1 && key <= 6){
+                                int a;
+                            cout<<"\n\n\tHOW MANY PIZZAS DO YOU WANT : ";
+                            cin>>pizza;
+
+                            a = price[key-1];
+                            bill(a,pizza);
+                            auto it = find(olist.begin(), olist.end(), key);
+                            if(olist.end() == it) olist.push_back(key);
+                            (listar[key-1] == 0)?listar[key-1] = pizza : listar[key-1] += pizza;
+
+                            cout<<"\n\n\tYOU ORDER " << menuItems[key-1] <<endl<<"\tYOUR ORDER WAS SUCCESSFULLY SAVED\n"<<endl;
+                        }
+                        else if(key >= 7 && key <= 12)
+                        {
+                            int b;
+                            cout<<"\n\n\tHOW MANY BURGERS DO YOU WANT : ";
+                            cin>>burger;
+
+                            b = price[key-1];
+                            bill(b,burger);
+                            auto it = find(olist.begin(), olist.end(), key);
+                            if(olist.end() == it) olist.push_back(key);
+                            (listar[key-1] == 0)?listar[key-1] = burger : listar[key-1] += burger;
+
+                            cout<<"\n\n\tYOU ORDER " << menuItems[key-1] <<endl<<"\tYOUR ORDER WAS SUCCESSFULLY SAVED\n"<<endl;
+                        }
+                        else if(key >= 13 && key <= 18)
+                        {
+                            int p;
+                            cout<<"\n\n\tHOW MANY PASTAS DO YOU WANT : ";
+                            cin>>pasta;
+
+                            p = price[key-1];
+                            bill(p,pasta);
+                            auto it = find(olist.begin(), olist.end(), key);
+                            if(olist.end() == it) olist.push_back(key);
+                            (listar[key-1] == 0)?listar[key-1] = pasta: listar[key-1] += pasta;
+
+                            cout<<"\n\n\tYOU ORDER " << menuItems[key-1] <<endl<<"\tYOUR ORDER WAS SUCCESSFULLY SAVED\n"<<endl;
+                        }
+                        else if(key >= 19 && key <= 24)
+                        {
+                            int s;
+                            cout << "\n\n\tHOW MANY SOFT DRINKS DO YOU WANT : ";
+                            cin >> sd;
+
+                            s = price[key-1];
+                            bill(s,sd);
+                            auto it = find(olist.begin(), olist.end(), key);
+                            if(olist.end() == it) olist.push_back(key);
+                            (listar[key-1] == 0)?listar[key-1] = sd : listar[key-1] += sd;
+
+                            cout<<"\n\n\tYOU ORDERED " << menuItems[key-1] <<endl<<"\tYOUR ORDER WAS SUCCESSFULLY SAVED\n"<<endl;
+                        }
+                        else if(key == 25){
+                            cout<<"\n\t\t\t\t\t\t\t *** THANK YOU ***";
+                            exit(0);
+                        }
+                        else{
+                            cout<<"\n\n\t\t\t\t\t\t\tYOU ENTER WRONG ORDER KEY !!!!! "<<endl;
+                            goto c;
+                        }
+                    }
+
+                    cout<<"\n\tDO YOU WANT ANOTHER ORDER (yes/no) : ";
+                    cin>>ans;
+                    if(ans == "yes" || ans == "YES")
+                        goto a;
+
+                    else
+                    {
+                        cout << "\n\n\tYOU HAVE ORDERED : \n";
+                        sort(olist.begin(), olist.end());
+                        for(int i = 0; i < olist.size(); i++) cout << "\t\t" << olist[i] << ". " << menuItems[olist[i]-1] <<"  - Quantity - " << listar[olist[i]-1]<< endl;
+// to delete order
+                        cout << "\n\tDO YOU WANT TO DELETE YOUR ORDER (yes/no) :";
+                        cin>>ans;
+
+                        if(ans == "yes" || ans == "YES")
+                        {
+                            x:
+                                int del;
+                            cout << "\n\n\t\t\t\tENTER THE KEY OF YOUR ORDER THAT YOU WANT TO DELETE(one at a time) :";
+                            cin >> key;
+
+                            if(listar[key-1] > 0) {
+                                cout << "\n\nHOW MANY " << menuItems[key-1] << " YOU WANT TO ORDER : " ;
+                                cin >> del;  cout << endl;
+
+                                if(del == listar[key-1]){
+                                    auto it = find(olist.begin(), olist.end(), key);
+                                    olist.erase(it);
+                                }
+
+                                bill(listar[key-1],del,price[key-1]);
+                                listar[key-1] = del;
+
+                                cout << "DO YOU WANT TO DELETE MORE ITEMS ? (yes/no) : ";
+                                cin >> ans;
+
+                                if(ans == "yes" || ans == "YES") goto x;
+                            }
+
+                            else { cout << "\nYOU HAVE NOT ORDERED THIS ITEM\n"; goto x; }
+                        }
+
+                        cout<<"\n\t\t\t\t\t\t\tTHANK YOU FOR YOUR ORDER :) GENERATING BILL ";
+                        for(int i=1; i < 8; i++)
+                        {
+                            Sleep(500);
+                            cout << "..";
+                        }
+                        cout<<"\n\t\t\t\t\t\t\t";
+                        system("PAUSE");
+                    }
+
+                    for(int i = 0; i < 24; i++){
+                        if(listar[i] > 0) {
+                            write<<"YOU ORDERED " <<i+1<< ". " <<  menuItems[i] << ": " << price[i] << endl;
+                            if(i >= 0 && i <= 5) write << "NUMBER OF PIZZA IS : " << listar[i] << endl << endl;
+                            else if(i >= 6 && i <= 11) write << "NUMBER OF BURGER IS : " << listar[i] << endl<< endl;
+                            else if(i >= 12 && i <= 17) write << "NUMBER OF PASTA IS : " << listar[i] << endl<< endl;
+                            else write << "NUMBER OF SOFT DRINKS IS : " << listar[i] << endl<< endl;
+
+                        }
+                    }
+
+                    system("CLS");
+						cout << "\n\t\t\t\t\t\t\t ================================================"<<endl;
+						cout << "\t\t\t\t\t\t\t|               ORDER MEMEO                      |"<<endl;
+						cout << "\t\t\t\t\t\t\t ================================================"<<endl;
+						cout << endl;
+						cout << endl;
+                        int billno = rand(), orderno = rand();
+						cout << "\t\t\t\t\t\t\t  Bill No : " << billno << "  Order : XYZ" << orderno <<endl;
+						cout << endl;
+						cout << endl;
+						cout << "\t\t\t\t\t\t\t  Cashier :  FARHAN"<<endl;
+						cout << endl;
+                        cout<<"\t\t\t\t\t\t\t\t    YOUR TOTAL BILL IS Tk."<<total<<endl;
+                        write<<"\t\t\t\t\t\t\t ";
+                        write<<"\t\t\t\t\t\t\tTOTAL BILL IS : "<<total;
+						cout << "\n\t\t\t\t\t\t\t ================================================"<<endl;
+
+
+  write.close();
+    }
+};
+
+class pizza : public order
+{
+
+};
+
+class log_in : public menu
+{
+private:
+    int ID = 7064;
+    string pass = "passcode";
+public :
+    log_in()
+    {
+
+        Iagain:
+            int id;
+        cout << "\n\n\n\t\t\t\t\t\t\t\tEnter Log in ID : ";
+        cin >> id;
+
+        if(id != ID){
+            cout << "\n\t*** Wrong Log in ID.  Enter the correct one. ***";
+            goto Iagain;
+        }
+
+        again:
+        string p = "";
+        cout <<"\n\n\t\t\t\t\t\t\t\tEnter password : ";
+
+        Pagain:
+
+        char c;
+        c = getch();
+        cout << "*";
+        if(c!=13)
+            {
+                p=p+c;  //for concatenating the string
+                goto Pagain;
+            }
+        {
+        if(p == pass){
+            cout << "\n\n\n\t\t\t\t\t\t\t\t   ---- Welcome ----";
+            cout << "\n\n\n\t\t\t\t\t\t\t\t";
+                system("PAUSE");
+                system("CLS");
+        }
+        else {
+            cout << "\n\t*** Wrong password.  Enter the correct one. ***";
+            goto again;
+        }
+
+        }
+
+        show();
+
+    }
+};
+
+int main()
+{
+    log_in log;
+    order ord;
+}
