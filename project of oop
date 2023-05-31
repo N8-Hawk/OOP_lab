@@ -248,11 +248,6 @@ public:
     }
 };
 
-class pizza : public order
-{
-
-};
-
 class log_in : public menu
 {
 private:
